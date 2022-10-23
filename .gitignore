@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+/src/database/database.providers.copy.ts
+/src/auth/constants.copy.ts
 
 # Logs
 logs
