@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 ## Installation
 
 ```bash
