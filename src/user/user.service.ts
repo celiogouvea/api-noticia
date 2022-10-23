@@ -1,8 +1,9 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { User } from "./user.entity";
-import { userCreateDto } from "./dto/user.create.dto";
+import { userDto } from "./dto/user.dto";
 import { resultDto } from "src/dto/result.dto";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UserService {
@@ -19,7 +20,9 @@ export class UserService {
     return await this.userRepository.findOneBy({ id: id });
   }
 
-  async create(data: userCreateDto): Promise<resultDto> {
+  async create(data: userDto): Promise<resultDto> {
+    const hash = bcrypt.hashSync(data.password,8);
+    data.password = hash;
     return await this.userRepository
       .save(data)
       .then((result) => {
@@ -36,7 +39,7 @@ export class UserService {
       });
   }
 
-  async update(id: number, noticia: userCreateDto): Promise<resultDto> {
+  async update(id: number, noticia: userDto): Promise<resultDto> {
     const result = await this.userRepository.update(id, noticia);
     if (result.affected === 1) {
       return <resultDto>{
@@ -84,5 +87,13 @@ export class UserService {
         description: "deleted error",
       };
     }
+  }
+
+
+
+
+
+  async findLogin(username: string): Promise<User | undefined> {
+    return this.userRepository.findOneBy({username : username});
   }
 }

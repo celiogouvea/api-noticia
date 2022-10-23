@@ -1,7 +1,7 @@
-export interface userCreateDto {
+export interface userDto {
   id?: number;
   name?: string;
-  cpf?: string;
+  username?: string;
   tel?: string;
   email?: string;
   password?: string;
