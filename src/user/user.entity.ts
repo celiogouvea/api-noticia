@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity()
 export class User {
@@ -20,6 +20,9 @@ export class User {
   @Column({ length: 255 })
   password: string;
 
-  @Column({type: 'timestamp', default: () => 'NOW()',})
+  @Column({ default: true })
+  status: boolean;
+
+  @Column({ type: "timestamp", default: () => "NOW()" })
   created_at: Timestamp;
 }
