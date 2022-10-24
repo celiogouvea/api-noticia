@@ -12,9 +12,12 @@ import {
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "src/auth/auth.service";
+import { Roles } from "src/auth/decorators/roles.decorator";
+import { RolesGuard } from "src/auth/guards/roles.guard";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { resultDto } from "src/dto/result.dto";
 import { userDto } from "./dto/user.dto";
+import { Role } from "./role.enum";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
 
@@ -37,9 +40,28 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() data: userDto): Promise<resultDto> {
+    return this.userService.create(data);
+  }
+
+  
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('admin')
+  @Roles(Role.ADMIN)
+  async createAdmin(@Body() data: userDto): Promise<resultDto> {
+    const role = Role.ADMIN;
+    data.role = role;
+    return this.userService.create(data);
+  }
+
+  @Roles(Role.SUPER)
+  @UseGuards(JwtAuthGuard)
+  @Post('super')
+  async createSuper(@Body() data: userDto): Promise<resultDto> {
+    const role = Role.SUPER;
+    data.role = role;
     return this.userService.create(data);
   }
 

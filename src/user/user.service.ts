@@ -17,12 +17,22 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<User> {
-    return await this.userRepository.findOneBy({ id: id });
+    const user =  await this.userRepository.findOneBy({ id: id });
+    const { password, ...result } = user;
+    return user;
   }
 
   async create(data: userDto): Promise<resultDto> {
     const hash = bcrypt.hashSync(data.password,8);
     data.password = hash;
+
+    console.log(data);
+    
+    return <resultDto>{
+      status: true,
+      description: "created success",
+    }
+    /*
     return await this.userRepository
       .save(data)
       .then((result) => {
@@ -37,6 +47,7 @@ export class UserService {
           description: "created error",
         };
       });
+      */
   }
 
   async update(id: number, noticia: userDto): Promise<resultDto> {
@@ -88,10 +99,6 @@ export class UserService {
       };
     }
   }
-
-
-
-
 
   async findLogin(username: string): Promise<User | undefined> {
     return this.userRepository.findOneBy({username : username});

@@ -5,6 +5,7 @@ import { TokenModule } from 'src/token/token.module';
 import { UserModule } from 'src/user/user.module';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
+import { RolesGuard } from './guards/roles.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 
@@ -14,10 +15,10 @@ import { LocalStrategy } from './local.strategy';
             PassportModule,
             JwtModule.register({
               secret: jwtConstants.secret,
-              signOptions: { expiresIn: '1m' },
+              signOptions: { expiresIn: '10m' },
             }),
           ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, RolesGuard],
   exports:[JwtModule, AuthService ],
 })
 export class AuthModule {}
