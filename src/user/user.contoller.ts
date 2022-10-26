@@ -5,10 +5,9 @@ import {
   Get,
   Post,
   Put,
-  Delete,
   Patch,
   UseGuards,
-  Request
+  Request,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "src/auth/auth.service";
@@ -25,10 +24,12 @@ export class UserController {
     private authService: AuthService
     ) {}
 
+ 
+
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+    return this.userService.findAll(0);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -37,7 +38,6 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() data: userDto): Promise<resultDto> {
     return this.userService.create(data);
@@ -47,12 +47,6 @@ export class UserController {
   @Put(":id")
   update(@Param("id") id: number, @Body() data: userDto): Promise<any> {
     return this.userService.update(id, data);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Delete(":id")
-  delete(@Param("id") id: number) {
-    return this.userService.delete(id);
   }
 
   @UseGuards(JwtAuthGuard)

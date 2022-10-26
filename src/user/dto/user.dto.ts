@@ -1,3 +1,5 @@
+
+
 export interface userDto {
   id?: number;
   name?: string;
@@ -5,4 +7,5 @@ export interface userDto {
   tel?: string;
   email?: string;
   password?: string;
+  role?:string;
 }
