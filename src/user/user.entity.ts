@@ -23,6 +23,9 @@ export class User {
   @Column({ default: true })
   status: boolean;
 
+  @Column({ default: "user" })
+  role: string;
+
   @Column({ type: "timestamp", default: () => "NOW()" })
   created_at: Timestamp;
 }

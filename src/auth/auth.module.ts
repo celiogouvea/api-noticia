@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TokenModule } from 'src/token/token.module';
@@ -14,7 +15,7 @@ import { LocalStrategy } from './local.strategy';
             PassportModule,
             JwtModule.register({
               secret: jwtConstants.secret,
-              signOptions: { expiresIn: '1m' },
+              signOptions: { expiresIn: '10m' },
             }),
           ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
