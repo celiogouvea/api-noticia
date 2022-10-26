@@ -5,19 +5,15 @@ import {
   Get,
   Post,
   Put,
-  Delete,
   Patch,
   UseGuards,
-  Request
+  Request,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "src/auth/auth.service";
-import { Roles } from "src/auth/decorators/roles.decorator";
-import { RolesGuard } from "src/auth/guards/roles.guard";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { resultDto } from "src/dto/result.dto";
 import { userDto } from "./dto/user.dto";
-import { Role } from "./role.enum";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
 
@@ -28,10 +24,12 @@ export class UserController {
     private authService: AuthService
     ) {}
 
+ 
+
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+    return this.userService.findAll(0);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -40,28 +38,8 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  //@UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() data: userDto): Promise<resultDto> {
-    return this.userService.create(data);
-  }
-
-  
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('admin')
-  @Roles(Role.ADMIN)
-  async createAdmin(@Body() data: userDto): Promise<resultDto> {
-    const role = Role.ADMIN;
-    data.role = role;
-    return this.userService.create(data);
-  }
-
-  @Roles(Role.SUPER)
-  @UseGuards(JwtAuthGuard)
-  @Post('super')
-  async createSuper(@Body() data: userDto): Promise<resultDto> {
-    const role = Role.SUPER;
-    data.role = role;
     return this.userService.create(data);
   }
 
@@ -69,12 +47,6 @@ export class UserController {
   @Put(":id")
   update(@Param("id") id: number, @Body() data: userDto): Promise<any> {
     return this.userService.update(id, data);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Delete(":id")
-  delete(@Param("id") id: number) {
-    return this.userService.delete(id);
   }
 
   @UseGuards(JwtAuthGuard)

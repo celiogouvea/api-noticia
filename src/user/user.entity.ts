@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn, Timestamp } from "typeorm";
-import { Role } from "./role.enum";
 
 @Entity()
 export class User {
@@ -24,8 +23,8 @@ export class User {
   @Column({ default: true })
   status: boolean;
 
-  @Column({default: Role.USER, type:'enum', enum:Role})
-  role: Role;
+  @Column({ default: "user" })
+  role: string;
 
   @Column({ type: "timestamp", default: () => "NOW()" })
   created_at: Timestamp;

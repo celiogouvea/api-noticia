@@ -12,27 +12,42 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+  async findAll(status: number): Promise<User[]> {
+    if (status === 0) {
+      const users = await this.userRepository.find({where:{status: true}});
+      return users.map(user => { 
+        delete user.password;
+        delete user.status;
+        delete user.role;
+        return user;
+      });
+    }else{
+      const users = await this.userRepository.find();
+      return users.map(user => { 
+        delete user.password;
+        delete user.status;
+        delete user.role;
+        return user;
+      });
+    }
+    
   }
 
   async findOne(id: number): Promise<User> {
     const user =  await this.userRepository.findOneBy({ id: id });
-    const { password, ...result } = user;
-    return user;
+    const u = new User;
+    u.id = user.id;
+    u.name = user.name;
+    u.username = user.username;
+    u.tel = user.tel;
+    u.email = user.email;
+    u.created_at = user.created_at;
+    return u;
   }
 
   async create(data: userDto): Promise<resultDto> {
     const hash = bcrypt.hashSync(data.password,8);
     data.password = hash;
-
-    console.log(data);
-    
-    return <resultDto>{
-      status: true,
-      description: "created success",
-    }
-    /*
     return await this.userRepository
       .save(data)
       .then((result) => {
@@ -47,7 +62,6 @@ export class UserService {
           description: "created error",
         };
       });
-      */
   }
 
   async update(id: number, noticia: userDto): Promise<resultDto> {

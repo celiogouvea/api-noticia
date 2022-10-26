@@ -1,4 +1,4 @@
-import { Role } from "../role.enum";
+
 
 export interface userDto {
   id?: number;
@@ -7,5 +7,5 @@ export interface userDto {
   tel?: string;
   email?: string;
   password?: string;
-  role?: Role;
+  role?:string;
 }
